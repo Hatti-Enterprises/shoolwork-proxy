@@ -21,9 +21,9 @@
 // ============================================================
 // CONFIG — EDIT THESE THREE LINES (must match loader/index.html)
 // ============================================================
-const GITHUB_REPO = 'your-username/shoolwork-proxy';  // ← CHANGE THIS
-const BRANCH = 'main';                                // ← usually 'main' or 'master'
-const BACKEND_URL = 'https://your-backend.vercel.app'; // ← your Vercel backend URL
+    const GITHUB_REPO = 'Hatti-Enterprises/shoolwork-proxy';
+    const BRANCH = 'main';
+    const BACKEND_URL = 'https://shoolwork-proxy-backend.vercel.app/';
 // ============================================================
 
 // Pass BACKEND_URL to the real SW before it loads.

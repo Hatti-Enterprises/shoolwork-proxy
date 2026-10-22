@@ -42,6 +42,7 @@ self.addEventListener('fetch', function(event) {
   // Fetch the target via the bare server
   event.respondWith(
     fetch(BARE_URL + '/v3', {
+      mode:'cors',
       method: event.request.method,
       headers: {
         'X-Bare-URL': targetUrl,

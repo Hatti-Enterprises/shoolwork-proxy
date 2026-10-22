@@ -36,28 +36,6 @@
   <div class="msg" id="msg">Loading Shoolwork Proxy…</div>
 
   <script>
-    /* ============================================================
-     * Shoolwork Proxy — jsDelivr Loader (multi-file, no build needed)
-     *
-     * This file lives on YOUR domain. It fetches the latest frontend
-     * from jsDelivr (which serves files directly from your GitHub repo)
-     * and runs it — with all CSS/JS modules loading from jsDelivr.
-     *
-     * How it works:
-     *   1. fetch() pulls frontend/index.html from jsDelivr
-     *   2. Injects <base href="jsDelivr-URL"> so relative URLs (./js/app.js,
-     *      ./css/style.css, ./assets/icon.svg) resolve to jsDelivr
-     *   3. document.write() replaces this page with the fetched HTML
-     *   4. Browser loads CSS + JS modules from jsDelivr via the <base> tag
-     *   5. JS registers /sw.js (same-origin = YOUR domain) via location.href
-     *      which is NOT affected by <base> — so SW stays on your domain
-     *   6. /sw.js (the proxy file) importScripts() the real sw.js from jsDelivr
-     *   7. SW computes UV prefix from self.registration.scope = YOUR domain
-     *   8. Proxy works — URL bar shows YOUR domain
-     *
-     * No build step. No single-file compilation. Just push to GitHub.
-     * ============================================================ */
-
     // ============================================================
     // CONFIG — EDIT THESE THREE LINES
     // ============================================================
@@ -68,32 +46,17 @@
 
     const JSDELIVR_BASE = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@${BRANCH}/frontend/`;
     const JSDELIVR_INDEX = JSDELIVR_BASE + 'index.html';
-
-    // Bust jsDelivr's edge cache so users always get fresh content
     const fetchUrl = JSDELIVR_INDEX + '?t=' + Date.now();
 
     fetch(fetchUrl, { cache: 'no-store' })
       .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status} — check that ${GITHUB_REPO} is public and frontend/index.html exists on branch ${BRANCH}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status} — check that ${GITHUB_REPO} is public`);
         return res.text();
       })
       .then(html => {
-        // Inject <base> tag so all relative URLs (./js/*.js, ./css/style.css,
-        // ./assets/icon.svg) resolve to jsDelivr instead of this domain.
-        //
-        // Also inject window.SHoolworkBackendUrl so the UV config + API calls
-        // point at the correct backend — set HERE in the loader, not in the
-        // frontend source. This means you only edit ONE file (this loader)
-        // to configure everything.
-        //
-        // The <base> tag ONLY affects URL resolution in HTML attributes
-        // (href, src). It does NOT affect:
-        //   - location.href (still = this domain)
-        //   - new URL('sw.js', location.href) in JS (still = this domain/sw.js)
-        //   - The SW registration URL (still = this domain)
-        //   - The UV prefix computed from location.href (still = this domain/service/)
         const baseTag = '<base href="' + JSDELIVR_BASE + '">';
-        const backendScript = '<script>window.SHoolworkBackendUrl = "' + BACKEND_URL + '";</script>';
+        // Split closing script tag to avoid breaking HTML parser
+        const backendScript = '<scr' + 'ipt>window.SHoolworkBackendUrl = "' + BACKEND_URL + '";</scr' + 'ipt>';
         const modifiedHtml = html.replace('<head>', '<head>' + baseTag + backendScript);
 
         document.open();
@@ -105,7 +68,7 @@
         document.getElementById('msg').textContent = 'Failed to load';
         const errDiv = document.createElement('div');
         errDiv.className = 'err';
-        errDiv.innerHTML = escapeHtml(err.message) + '<br><br>Check that:<br>• GITHUB_REPO is set correctly<br>• Your GitHub repo is public<br>• frontend/index.html exists on branch ' + BRANCH + '<br><br>jsDelivr URL: <a href="' + JSDELIVR_INDEX + '" target="_blank">' + JSDELIVR_INDEX + '</a>';
+        errDiv.innerHTML = escapeHtml(err.message) + '<br><br>Check that:<br>- GITHUB_REPO is set correctly<br>- Your GitHub repo is public<br>- frontend/index.html exists on branch ' + BRANCH + '<br><br>jsDelivr URL: <a href="' + JSDELIVR_INDEX + '" target="_blank">' + JSDELIVR_INDEX + '</a>';
         document.body.appendChild(errDiv);
       });
 

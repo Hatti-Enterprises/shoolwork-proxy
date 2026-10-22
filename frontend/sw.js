@@ -1,9 +1,13 @@
-/* Shoolwork Proxy — Ultraviolet service worker (self-contained)
+/* Shoolwork Proxy — Ultraviolet service worker (self-contained, jsDelivr-compatible)
  *
- * This file is the ONLY separate file required by the frontend (the
- * rest is inlined into index.html). The browser doesn't allow SWs to
- * be inlined as data: or blob: URLs — they must be served as a real
- * HTTP resource from the same origin as the page that registers them.
+ * This file is the ONLY separate file required by the frontend (the rest is
+ * inlined into index.html). The browser doesn't allow SWs to be inlined
+ * as data: or blob: URLs — they must be served as a real HTTP resource
+ * from the same origin as the page that registers them.
+ *
+ * COMPATIBILITY: works on any static host (jsDelivr loader, GitHub Pages,
+ * Netlify, Cloudflare Pages, S3, Vercel static) because the UV prefix is
+ * computed RELATIVE to the SW's own URL at runtime.
  *
  * Config is inlined (no separate uv.config.js needed):
  *   - BACKEND_URL must be set below to point at your backend deployment
@@ -13,11 +17,6 @@
  *   1. uv.bundle.js (CDN) — defines the global `Ultraviolet` object
  *   2. THIS FILE — sets `self.__uv.config` with inlined bare URL
  *   3. uv.handler.js (CDN) — reads `self.__uv.config` and registers fetch handlers
- *
- * After UV's handler is registered, we add a fetch listener that runs
- * AFTER UV's, intercepting proxied HTML responses to inject:
- *   - Chrome API shim (chrome.storage, chrome.runtime, etc.)
- *   - User-installed extension content scripts that match the URL
  */
 
 // ====================================================================
@@ -32,6 +31,10 @@ const BACKEND_URL = self.BACKEND_URL || 'https://your-backend.vercel.app';  // �
 // ====================================================================
 
 importScripts('https://cdn.jsdelivr.net/npm/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js');
+
+// uv.handler.js requires self.__uv$cookies to be a string (it's normally
+// injected into pages by UV, but in the SW context we need to set it manually).
+self.__uv$cookies = self.__uv$cookies || '';
 
 /* Compute the UV prefix RELATIVE to this SW's own scope.
  *
@@ -103,18 +106,18 @@ async function postProcessResponse(response, proxiedUrl) {
 
     const shimsAndScripts = [
       CHROME_SHIM_INLINE,
-      ...injectables.scripts.map(s => `//# sourceURL=shoolwork-ext://${s.extId}/${s.file}\n${s.code}`),
+      ...injectables.scripts.map(s => '//# sourceURL=shoolwork-ext://' + s.extId + '/' + s.file + '\n' + s.code),
     ].join('\n;\n');
 
     const cssBlock = injectables.css.map(c => c.css).join('\n/* --- */\n');
-    const cssTag = cssBlock ? `<style data-shoolwork-ext>${escapeHtml(cssBlock)}</style>` : '';
+    const cssTag = cssBlock ? '<style data-shoolwork-ext>' + escapeHtml(cssBlock) + '</style>' : '';
 
-    const scriptTag = `<script data-shoolwork-ext>${shimsAndScripts}</script>`;
+    const scriptTag = '<scr' + 'ipt data-shoolwork-ext>' + shimsAndScripts + '</scr' + 'ipt>';
     let modifiedHtml;
     if (/<head[^>]*>/i.test(html)) {
-      modifiedHtml = html.replace(/(<head[^>]*>)/i, `$1${cssTag}${scriptTag}`);
+      modifiedHtml = html.replace(/(<head[^>]*>)/i, '$1' + cssTag + scriptTag);
     } else if (/<html[^>]*>/i.test(html)) {
-      modifiedHtml = html.replace(/(<html[^>]*>)/i, `$1<head>${cssTag}${scriptTag}</head>`);
+      modifiedHtml = html.replace(/(<html[^>]*>)/i, '$1<head>' + cssTag + scriptTag + '</head>');
     } else {
       modifiedHtml = cssTag + scriptTag + html;
     }

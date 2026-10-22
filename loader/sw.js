@@ -23,7 +23,7 @@
 // ============================================================
     const GITHUB_REPO = 'Hatti-Enterprises/shoolwork-proxy';
     const BRANCH = 'main';
-    const BACKEND_URL = 'https://shoolwork-proxy-backend.vercel.app/';
+    const BACKEND_URL = 'https://shoolwork-proxy-backend.vercel.app';
 // ============================================================
 
 // Pass BACKEND_URL to the real SW before it loads.

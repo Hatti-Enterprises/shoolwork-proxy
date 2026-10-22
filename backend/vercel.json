@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/bare/[...path].js": { "maxDuration": 30 },
+    "api/auth.js": { "maxDuration": 15 },
+    "api/sync.js": { "maxDuration": 30 },
+    "api/access/index.js": { "maxDuration": 15 },
+    "api/access/admin.js": { "maxDuration": 15 }
+  }
+}

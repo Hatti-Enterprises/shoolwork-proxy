@@ -1,0 +1,482 @@
+  <!-- Top chrome -->
+  <header class="chrome">
+    <div class="chrome__brand">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNmVlN2ZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E3OGJmYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzIiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBkMTAxOSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTEzMzAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI1NiIgaGVpZ2h0PSI1NiIgcng9IjE0IiBmaWxsPSJ1cmwoI2cyKSIgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8IS0tIFN0eWxpemVkICdTJyBmb3IgU2hvb2x3b3JrIC0tPgogIDxwYXRoIGQ9Ik00MCAyNGMwLTQtNC03LTktN3MtOSAzLTkgNyA0IDYgOSA2IDkgMiA5IDYtNCA3LTkgNy05LTMtOS03IgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMSkiIHN0cm9rZS13aWR0aD0iMy41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8IS0tIFN5bmMgYXJyb3dzIGFyb3VuZCAtLT4KICA8Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSIyIDQiIG9wYWNpdHk9IjAuNCIvPgo8L3N2Zz4K" alt="" width="22" height="22" />
+      <span class="chrome__title">Shoolwork Proxy</span>
+    </div>
+
+    <nav class="chrome__nav" id="chromeNav">
+      <button class="chrome__nav-btn is-active" data-view="home">Home</button>
+      <button class="chrome__nav-btn" data-view="proxy">Proxy</button>
+      <button class="chrome__nav-btn" data-view="extensions">Extensions</button>
+      <button class="chrome__nav-btn" data-view="settings">Settings</button>
+      <button class="chrome__nav-btn" data-view="sync">Drive Sync</button>
+    </nav>
+
+    <div class="chrome__actions">
+      <button class="icon-btn" id="aboutBlankBtn" title="Open in about:blank (cloak)" aria-label="Open in about:blank">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+      </button>
+      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+      </button>
+      <button class="icon-btn" id="profileBtn" title="Account" aria-label="Account">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bookmarks bar -->
+  <div class="bookmarks" id="bookmarksBar">
+    <button class="bookmarks__add" id="bookmarkAdd" title="Add current site">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <div class="bookmarks__list" id="bookmarksList"></div>
+  </div>
+
+  <!-- Main view: New tab -->
+  <main class="view view--home is-active" id="view-home">
+    <section class="hero">
+      <div class="hero__clock">
+        <div class="hero__time" id="heroTime">--:--</div>
+        <div class="hero__date" id="heroDate">—</div>
+      </div>
+
+      <form class="hero__search" id="searchForm" autocomplete="off">
+        <svg class="hero__search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input class="hero__search-input" id="searchInput" type="text" placeholder="Search the web or enter a URL" spellcheck="false" />
+        <select class="hero__search-engine" id="searchEngine">
+          <option value="brave">Brave</option>
+          <option value="bing">Bing</option>
+          <option value="google">Google</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+        </select>
+        <button class="hero__search-go" type="submit">Go</button>
+      </form>
+
+      <div class="hero__favorites" id="favoritesGrid">
+        <!-- Favorites dynamically injected -->
+      </div>
+    </section>
+
+    <section class="recent">
+      <h2 class="recent__title">Recent</h2>
+      <ul class="recent__list" id="recentList">
+        <li class="recent__empty">No recent activity yet.</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Proxy view -->
+  <main class="view view--proxy" id="view-proxy">
+    <div class="tabs">
+      <div class="tabs__strip" id="tabsStrip">
+        <button class="tabs__new" id="tabsNew" title="New tab">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="tabs__toolbar">
+        <button class="nav-btn" id="navBack" title="Back"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="nav-btn" id="navForward" title="Forward"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button class="nav-btn" id="navReload" title="Reload"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+        <button class="nav-btn" id="navHome" title="Home"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></button>
+        <form class="tabs__addressbar" id="addressForm" autocomplete="off">
+          <svg class="tabs__addressbar-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input class="tabs__addressbar-input" id="addressInput" placeholder="Search or enter URL" spellcheck="false" />
+        </form>
+        <button class="nav-btn" id="devtoolsToggle" title="DevTools"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h7"/></svg></button>
+      </div>
+    </div>
+    <div class="proxy__body">
+      <div class="proxy__frame-wrap" id="frameWrap">
+        <div class="proxy__splash" id="proxySplash">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNmVlN2ZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E3OGJmYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzIiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBkMTAxOSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTEzMzAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSI1NiIgaGVpZ2h0PSI1NiIgcng9IjE0IiBmaWxsPSJ1cmwoI2cyKSIgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8IS0tIFN0eWxpemVkICdTJyBmb3IgU2hvb2x3b3JrIC0tPgogIDxwYXRoIGQ9Ik00MCAyNGMwLTQtNC03LTktN3MtOSAzLTkgNyA0IDYgOSA2IDkgMiA5IDYtNCA3LTkgNy05LTMtOS03IgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMSkiIHN0cm9rZS13aWR0aD0iMy41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8IS0tIFN5bmMgYXJyb3dzIGFyb3VuZCAtLT4KICA8Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSIyIDQiIG9wYWNpdHk9IjAuNCIvPgo8L3N2Zz4K" width="64" height="64" alt="" />
+          <p>Open a new tab above or search to begin.</p>
+        </div>
+      </div>
+      <aside class="devtools" id="devtools" hidden>
+        <div class="devtools__tabs">
+          <button class="devtools__tab is-active" data-dt="requests">Requests</button>
+          <button class="devtools__tab" data-dt="storage">Storage</button>
+          <button class="devtools__tab" data-dt="metrics">Metrics</button>
+        </div>
+        <div class="devtools__panel" id="dtRequests"></div>
+        <div class="devtools__panel" hidden id="dtStorage"></div>
+        <div class="devtools__panel" hidden id="dtMetrics"></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Extensions view -->
+  <main class="view view--extensions" id="view-extensions">
+    <div class="extensions">
+      <h1 class="extensions__title">Browser Extensions</h1>
+      <p class="extensions__subtitle">
+        Load Chrome (<code>.crx</code>), Firefox (<code>.xpi</code>), or userscript (<code>.user.js</code>) files.
+        Content scripts that match a URL pattern are injected into proxied pages automatically. A
+        <code>chrome.*</code> shim is provided so basic extensions work without modification.
+      </p>
+
+      <div class="extensions__drop" id="extDropZone">
+        <input type="file" id="extFileInput" accept=".crx,.xpi,.user.js,.zip" multiple hidden />
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v12m0-12l-4 4m4-4l4 4"/><path d="M5 21h14"/></svg>
+        <div class="extensions__drop-text">
+          <strong>Drop extension file here</strong>
+          <span>or click to browse — .crx, .xpi, .user.js</span>
+        </div>
+      </div>
+
+      <div class="extensions__list" id="extList">
+        <div class="extensions__empty">No extensions installed yet.</div>
+      </div>
+
+      <details class="extensions__compat">
+        <summary>What works &amp; what doesn't (honest compatibility table)</summary>
+        <table class="extensions__compat-table">
+          <thead><tr><th>Feature</th><th>Works?</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>content_scripts</code></td><td class="ok">Yes</td><td>Injected into proxied HTML before iframe load</td></tr>
+            <tr><td><code>chrome.storage.local</code></td><td class="ok">Shim</td><td>Backed by in-page memory (not persisted across sessions)</td></tr>
+            <tr><td><code>chrome.runtime.sendMessage</code></td><td class="warn">Shim</td><td>No-op — no real background page to receive</td></tr>
+            <tr><td><code>browser_action</code> / <code>page_action</code></td><td class="no">No</td><td>No toolbar in the proxied page</td></tr>
+            <tr><td><code>background</code> scripts</td><td class="no">No</td><td>SW can't run persistent background timers</td></tr>
+            <tr><td><code>webRequest</code> blocking</td><td class="warn">Limited</td><td>SW sees all proxied requests but synchronous blocking is hard</td></tr>
+            <tr><td><code>tabs</code> API</td><td class="no">No</td><td>Extension can't see real browser tabs</td></tr>
+            <tr><td><code>cookies</code> API</td><td class="warn">Shim</td><td>Proxied origin only</td></tr>
+            <tr><td>Native messaging</td><td class="no">No</td><td>Browser doesn't expose it to page context</td></tr>
+          </tbody>
+        </table>
+        <p class="extensions__note">
+          <strong>Best fit:</strong> content-script-only extensions (uBlock Origin Lite, Dark Reader, userscripts, ad blockers, custom CSS, password autofill shims).<br>
+          <strong>Worst fit:</strong> extensions needing background pages (1Password, Bitwarden full, Grammarly, LastPass) — they'll run in degraded mode.
+        </p>
+      </details>
+    </div>
+  </main>
+
+  <!-- Settings view -->
+  <main class="view view--settings" id="view-settings">
+    <div class="settings">
+      <h1 class="settings__title">Settings</h1>
+      <p class="settings__subtitle">28 options · synced to Google Drive when signed in</p>
+
+      <section class="settings__group" data-group="cloak">
+        <h2>Cloak (Tab Disguise)</h2>
+        <p class="settings__group-hint">Disguise the browser tab as something innocuous. Title and favicon update live and persist across sessions.</p>
+        <div class="setting" data-key="cloakTitle">
+          <label>Tab title</label>
+          <input type="text" placeholder="Google Classroom" />
+        </div>
+        <div class="setting" data-key="cloakFavicon">
+          <label>Favicon URL</label>
+          <input type="text" placeholder="https://www.google.com/favicon.ico" />
+        </div>
+        <div class="setting">
+          <label>Quick presets</label>
+          <div class="cloak-presets" id="cloakPresets">
+            <button class="cloak-preset" data-title="Google Classroom" data-favicon="https://www.google.com/favicon.ico">Classroom</button>
+            <button class="cloak-preset" data-title="Google Drive - My Drive" data-favicon="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">Drive</button>
+            <button class="cloak-preset" data-title="Google Docs - Untitled document" data-favicon="https://www.google.com/docs/about/favicon.ico">Docs</button>
+            <button class="cloak-preset" data-title="Canvas LMS" data-favicon="https://canvas.instructure.com/favicon.ico">Canvas</button>
+            <button class="cloak-preset" data-title="Outlook" data-favicon="https://outlook.live.com/favicon.ico">Outlook</button>
+            <button class="cloak-preset" data-title="" data-favicon="">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="appearance">
+        <h2>Appearance</h2>
+        <div class="setting" data-key="theme">
+          <label>Theme</label>
+          <select><option value="dark">Dark</option><option value="light">Light</option></select>
+        </div>
+        <div class="setting" data-key="fontSize">
+          <label>Font size</label>
+          <input type="range" min="12" max="20" step="1" />
+          <span class="setting__value"></span>
+        </div>
+        <div class="setting" data-key="panelWidth">
+          <label>Side panel width</label>
+          <input type="range" min="200" max="560" step="10" />
+          <span class="setting__value"></span>
+        </div>
+        <div class="setting" data-key="bookmarksBar">
+          <label>Show bookmarks bar</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="wallpaper">
+          <label>Wallpaper</label>
+          <select>
+            <option value="aurora">Aurora</option>
+            <option value="midnight">Midnight</option>
+            <option value="graphite">Graphite</option>
+            <option value="sunset">Sunset</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="clock">
+        <h2>Clock</h2>
+        <div class="setting" data-key="clock24h">
+          <label>24-hour clock</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="showSeconds">
+          <label>Show seconds</label>
+          <input type="checkbox" />
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="search">
+        <h2>Search</h2>
+        <div class="setting" data-key="searchEngine">
+          <label>Default search engine</label>
+          <select>
+            <option value="brave">Brave</option>
+            <option value="bing">Bing</option>
+            <option value="google">Google</option>
+            <option value="duckduckgo">DuckDuckGo</option>
+          </select>
+        </div>
+        <div class="setting" data-key="blockAds">
+          <label>Block ads & trackers</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="cosmeticFilter">
+          <label>Cosmetic filtering</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="userAgentSpoof">
+          <label>User-agent spoofing</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="webrtcBlock">
+          <label>Block WebRTC (prevent IP leaks)</label>
+          <input type="checkbox" />
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="sync">
+        <h2>Google Drive Sync</h2>
+        <div class="setting" data-key="autoSync">
+          <label>Auto-sync browser storage</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="autoSyncInterval">
+          <label>Auto-sync interval (minutes)</label>
+          <input type="number" min="1" max="120" />
+        </div>
+        <div class="setting" data-key="syncOnUnload">
+          <label>Sync on tab close / unload</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="syncCookies">
+          <label>Sync cookies</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="syncLocalStorage">
+          <label>Sync localStorage</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="syncSessionStorage">
+          <label>Sync sessionStorage</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="syncIndexedDB">
+          <label>Sync IndexedDB (game saves)</label>
+          <input type="checkbox" />
+        </div>
+        <div class="setting" data-key="syncCacheAPI">
+          <label>Sync Cache API</label>
+          <input type="checkbox" />
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="keyboard">
+        <h2>Keyboard</h2>
+        <div class="setting" data-key="shortcutNewTab">
+          <label>New tab shortcut</label>
+          <input type="text" placeholder="Ctrl+T" />
+        </div>
+        <div class="setting" data-key="shortcutCloseTab">
+          <label>Close tab shortcut</label>
+          <input type="text" placeholder="Ctrl+W" />
+        </div>
+        <div class="setting" data-key="shortcutDevTools">
+          <label>Toggle DevTools</label>
+          <input type="text" placeholder="F12" />
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="provider">
+        <h2>Service Provider (Host)</h2>
+        <p class="settings__group-hint">Controls which sync modes are available to users of this deployment. Hosts who don't want to set up Google OAuth can switch to manual-only mode.</p>
+        <div class="setting" data-key="serviceProviderMode">
+          <label>Sync mode</label>
+          <select id="providerModeSelect">
+            <option value="full">Google Drive + manual file</option>
+            <option value="manual">Manual file only (no Drive)</option>
+          </select>
+        </div>
+        <div class="settings__provider-info" id="providerModeInfo">
+          <div class="settings__provider-info-row" data-mode="full">
+            <strong>Full mode:</strong> Users can sign in with Google to auto-sync encrypted backups to Drive, and also export/import local <code>.shoolwork.zip</code> files manually.
+          </div>
+          <div class="settings__provider-info-row" data-mode="manual" hidden>
+            <strong>Manual-only mode:</strong> Drive sign-in, auto-sync, and the Drive status panel are hidden. Users can still export/import encrypted <code>.shoolwork.zip</code> files locally. No Google OAuth credentials are required to deploy in this mode.
+          </div>
+        </div>
+      </section>
+
+      <section class="settings__group" data-group="advanced">
+        <h2>Advanced</h2>
+        <div class="setting" data-key="bareServer">
+          <label>Bare server URL</label>
+          <input type="text" />
+        </div>
+        <div class="setting" data-key="proxyPrefix">
+          <label>Proxy URL prefix</label>
+          <input type="text" />
+        </div>
+        <button class="settings__danger" id="settingsReset">Reset all settings &amp; storage</button>
+      </section>
+    </div>
+  </main>
+
+  <!-- Sync view -->
+  <main class="view view--sync" id="view-sync">
+    <div class="sync">
+      <h1 class="sync__title" id="syncTitle">Google Drive Sync</h1>
+      <p class="sync__subtitle" id="syncSubtitle">End-to-end encrypted backup of all browser storage — cookies, localStorage, sessionStorage, IndexedDB, Cache API. Encrypted with <strong>AES-256-GCM</strong> using a password-derived key (PBKDF2, 250k iterations). The Drive file is unreadable without your password.</p>
+
+      <!-- Password panel -->
+      <section class="sync__password">
+        <div class="sync__password-head">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4"/></svg>
+          <h3>Encryption password</h3>
+        </div>
+        <p class="sync__password-status" id="pwdIndicator">No password — backups cannot be encrypted</p>
+        <div class="sync__password-actions">
+          <button class="btn btn--primary" id="pwdSetBtn">Set password…</button>
+          <button class="btn" id="pwdEnterBtn">Enter password…</button>
+          <button class="btn btn--ghost" id="pwdClearBtn" hidden>Clear session password</button>
+        </div>
+      </section>
+
+      <div class="sync__status" id="syncStatus">
+        <div class="sync__status-dot" id="syncDot"></div>
+        <div class="sync__status-text" id="syncStatusText">Not signed in</div>
+      </div>
+
+      <div class="sync__signin" id="syncSignin">
+        <button class="btn btn--primary" id="signinBtn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21.35 11.1H12v2.96h5.35c-.23 1.5-.92 2.77-1.94 3.62v3.01h3.13c1.83-1.69 2.88-4.18 2.88-7.13 0-.7-.06-1.37-.18-2.02z"/><path d="M12 22c2.7 0 4.96-.9 6.62-2.43l-3.13-2.43c-.87.58-1.97.92-3.49.92-2.69 0-4.97-1.81-5.78-4.24H2.96v2.51A10 10 0 0 0 12 22z"/><path d="M6.22 13.82a6 6 0 0 1 0-3.82V7.49H2.96a10 10 0 0 0 0 8.94l3.26-2.61z"/><path d="M12 5.94c1.46 0 2.78.5 3.81 1.49l2.86-2.86A10 10 0 0 0 2.96 7.49l3.26 2.51C6.97 7.75 9.31 5.94 12 5.94z"/></svg>
+          Sign in with Google
+        </button>
+      </div>
+
+      <div class="sync__actions" id="syncActions" hidden>
+        <button class="btn btn--primary" id="exportNowBtn" data-drive-only>Export to Drive</button>
+        <button class="btn" id="importNowBtn" data-drive-only>Restore from Drive</button>
+        <button class="btn" id="downloadJsonBtn">Download .zip</button>
+        <button class="btn" id="uploadJsonBtn">Restore from file…</button>
+        <button class="btn btn--ghost" id="signoutBtn" data-drive-only>Sign out</button>
+      </div>
+
+      <div class="sync__meta" id="syncMeta" hidden>
+        <div><strong>Last backup:</strong> <span id="lastBackup">—</span></div>
+        <div><strong>Size:</strong> <span id="lastSize">—</span></div>
+        <div><strong>Encryption:</strong> <span id="encMode">AES-256-GCM</span></div>
+        <div><strong>Devices:</strong> <span id="deviceCount">1</span></div>
+      </div>
+
+      <details class="sync__advanced">
+        <summary>What gets synced (all encrypted)</summary>
+        <table class="sync__table">
+          <thead><tr><th>Storage</th><th>What it covers</th><th>Enabled</th></tr></thead>
+          <tbody>
+            <tr><td><code>document.cookie</code></td><td>Logged-in sessions on proxied sites</td><td id="capCookies">—</td></tr>
+            <tr><td><code>localStorage</code></td><td>Site settings, theme prefs, some game saves</td><td id="capLS">—</td></tr>
+            <tr><td><code>sessionStorage</code></td><td>Form drafts, in-progress sessions</td><td id="capSS">—</td></tr>
+            <tr><td><code>IndexedDB</code></td><td>Large game saves, PWA data, offline stores</td><td id="capIDB">—</td></tr>
+            <tr><td><code>Cache API</code></td><td>Service worker precaches</td><td id="capCache">—</td></tr>
+          </tbody>
+        </table>
+        <p class="sync__note">
+          <strong>File format:</strong> The Drive file is a <code>shoolwork-proxy-backup.shoolwork.zip</code> — an
+          AES-256-GCM encrypted container with the magic header <code>"SHL1"</code>. Inside (after decryption)
+          is a standard ZIP archive containing <code>backup.json</code> + <code>manifest.json</code>.
+          Even if Drive is compromised, your data remains encrypted.
+        </p>
+      </details>
+    </div>
+  </main>
+
+  <!-- Password modal -->
+  <div class="modal" id="pwdModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="pwdModalTitle">
+      <button class="modal__close" id="pwdModalClose" aria-label="Close">×</button>
+      <h2 class="modal__title" id="pwdModalTitle">Set backup password</h2>
+      <p class="modal__subtitle" id="pwdModalSubtitle"></p>
+
+      <label class="modal__label" for="pwdModalInput">Password</label>
+      <div class="modal__input-wrap">
+        <input type="password" id="pwdModalInput" autocomplete="off" spellcheck="false" />
+        <button type="button" class="modal__show" id="pwdToggleShow" aria-label="Show password">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__strength">
+        <meter id="pwdStrengthMeter" min="0" max="6" value="0" low="2" high="4" optimum="6"></meter>
+        <span id="pwdStrengthLabel"></span>
+      </div>
+
+      <label class="modal__label" id="pwdModalConfirmWrap" for="pwdModalConfirm" hidden>
+        Confirm password
+        <input type="password" id="pwdModalConfirm" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <label class="modal__check" id="pwdModalRememberWrap">
+        <input type="checkbox" id="pwdModalRemember" />
+        <span>Remember for this browser session <small>(stored in sessionStorage, cleared on close)</small></span>
+      </label>
+
+      <p class="modal__hint" id="pwdModalHint"></p>
+
+      <div class="modal__actions">
+        <button class="btn btn--ghost" id="pwdModalCancel">Cancel</button>
+        <button class="btn btn--primary" id="pwdModalSubmit">Set password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Access gate (shown when access control is enabled) -->
+  <div class="access-gate" id="accessGate" hidden>
+    <div class="access-gate__card">
+      <div class="access-gate__logo">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4"/></svg>
+      </div>
+      <h1 class="access-gate__title" id="accessGateTitle">Access Required</h1>
+      <p class="access-gate__subtitle" id="accessGateSubtitle">Enter your invite code or authenticator code to continue.</p>
+
+      <form class="access-gate__form" id="accessForm">
+        <input class="access-gate__input" id="accessCodeInput" type="text" placeholder="Enter code" autocomplete="off" spellcheck="false" />
+        <button class="btn btn--primary access-gate__submit" type="submit">Unlock</button>
+      </form>
+
+      <div class="access-gate__hint" id="accessGateHint"></div>
+
+      <details class="access-gate__methods">
+        <summary>What kind of code do I have?</summary>
+        <p><strong>8-character code</strong> (e.g. <code>K7M2-X9P4</code>) — invite code from the host. Works on one device only.</p>
+        <p><strong>6-digit code</strong> (e.g. <code>123456</code>) — TOTP code from your authenticator app (Authy, Google Authenticator, 1Password). Rotates every 30 seconds.</p>
+      </details>
+    </div>
+  </div>
+
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts"></div>
+

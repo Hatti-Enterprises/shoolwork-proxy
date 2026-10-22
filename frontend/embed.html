@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoolwork Proxy</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(110,231,255,0.10), transparent 60%),
+                  radial-gradient(900px 500px at 90% 80%, rgba(167,139,250,0.12), transparent 60%),
+                  linear-gradient(180deg, #0b0d12 0%, #0d1019 100%);
+      font-family: -apple-system, system-ui, sans-serif;
+      color: #f4f6fb;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 48px;
+    }
+    .icon {
+      width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(17,20,27,0.72);
+      border: 1px solid #2a3142;
+      border-radius: 14px;
+      color: #6ee7ff;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    p {
+      font-size: 13px;
+      color: #8a93a8;
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6ee7ff 0%, #a78bfa 100%);
+      border: none;
+      color: #0a0c12;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 120ms, filter 120ms;
+    }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+    }
+    .status {
+      font-size: 12px;
+      color: #5a6478;
+      min-height: 18px;
+    }
+    .status.is-error { color: #ff6b81; }
+    .status.is-success { color: #4ade80; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(110,231,255,0.2);
+      border-top-color: #6ee7ff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6">
+        <rect x="4" y="11" width="16" height="9" rx="2"/>
+        <path d="M8 11V7a4 4 0 1 1 8 0v4"/>
+      </svg>
+    </div>
+    <h1>Shoolwork Proxy</h1>
+    <p>Click below to open the proxy in an about:blank tab. Your address bar will show <code>about:blank</code> — nobody can see what site you're actually on.</p>
+    <button class="btn" id="launchBtn" disabled>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
+      </svg>
+      Open in about:blank
+    </button>
+    <div class="status" id="status">Preparing…</div>
+  </div>
+
+  <script>
+    /* ============================================================
+     * Shoolwork Proxy — about:blank Cloak Launcher
+     *
+     * This is a minimal page with one button. When clicked:
+     *   1. Pre-registers the SW on THIS domain (so the about:blank
+     *      popup inherits it)
+     *   2. Fetches the real frontend/index.html from jsDelivr
+     *   3. Injects config overrides (UV prefix, SW URL, backend URL)
+     *      pointing at THIS domain — not about:blank
+     *   4. Opens about:blank popup
+     *   5. document.write() the modified HTML into the popup
+     *   6. Popup runs the real proxy, address bar shows about:blank
+     *
+     * The about:blank popup inherits THIS page's origin, so the
+     * pre-registered SW controls it. The injected window.__UV_PREFIX
+     * etc. ensure the UV prefix + SW registration point at THIS domain
+     * (not about:blank, which would be invalid).
+     * ============================================================ */
+
+    // ============================================================
+    // CONFIG — EDIT THESE THREE LINES (must match loader/index.html)
+    // ============================================================
+    const GITHUB_REPO = 'your-username/shoolwork-proxy';
+    const BRANCH = 'main';
+    const BACKEND_URL = 'https://your-backend.vercel.app';
+    // ============================================================
+
+    const JSDELIVR_BASE = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@${BRANCH}/frontend/`;
+    const JSDELIVR_INDEX = JSDELIVR_BASE + 'index.html';
+    const statusEl = document.getElementById('status');
+    const launchBtn = document.getElementById('launchBtn');
+
+    // THIS page's URL — used for SW + UV prefix (injected into the popup)
+    const THIS_URL = location.href.replace(/[^/]*$/, '');  // directory part
+    const SW_URL = THIS_URL + 'sw.js';
+    const SW_SCOPE = THIS_URL;
+    const UV_PREFIX = THIS_URL + 'service/';
+
+    /* Step 1: Pre-register the SW on this domain.
+     * The about:blank popup will inherit this origin + the SW registration. */
+    async function preRegisterSW() {
+      if (!('serviceWorker' in navigator)) {
+        throw new Error('Service workers not supported');
+      }
+      try {
+        await navigator.serviceWorker.register(SW_URL, { scope: SW_SCOPE });
+      } catch (e) {
+        // SW might already be registered — that's fine
+        console.log('SW registration:', e.message);
+      }
+    }
+
+    /* Step 2: Fetch the real index.html from jsDelivr */
+    async function fetchFrontend() {
+      const url = JSDELIVR_INDEX + '?t=' + Date.now();
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status} — check ${GITHUB_REPO} is public`);
+      return res.text();
+    }
+
+    /* Step 3: Inject config overrides into the fetched HTML.
+     *
+     * We inject a <script> BEFORE the page's UV config script that sets:
+     *   - window.SHoolworkBackendUrl → BACKEND_URL
+     *   - window.__UV_PREFIX → THIS_URL + 'service/' (not about:blank!)
+     *   - window.__SW_URL → THIS_URL + 'sw.js' (not about:blank!)
+     *   - window.__SW_SCOPE → THIS_URL (not about:blank!)
+     *
+     * We also inject <base> so CSS/JS modules load from jsDelivr.
+     * The <base> tag does NOT affect location.href — so the popup's
+     * location.href stays "about:blank" (what we want for cloaking). */
+    function injectConfig(html) {
+      const baseTag = '<base href="' + JSDELIVR_BASE + '">';
+      // Note: split the closing tag to avoid breaking the HTML parser
+      const configScript = '<scr' + 'ipt>' +
+        'window.SHoolworkBackendUrl = "' + BACKEND_URL + '";' +
+        'window.__UV_PREFIX = "' + UV_PREFIX + '";' +
+        'window.__SW_URL = "' + SW_URL + '";' +
+        'window.__SW_SCOPE = "' + SW_SCOPE + '";' +
+        '</scr' + 'ipt>';
+      return html.replace('<head>', '<head>' + baseTag + configScript);
+    }
+
+    /* Step 4: Open about:blank + write the real proxy into it */
+    function openInAboutBlank(html) {
+      const popup = window.open('about:blank', '_blank');
+      if (!popup) {
+        throw new Error('Popup blocked — allow popups for this site, then try again.');
+      }
+      popup.document.open();
+      popup.document.write(html);
+      popup.document.close();
+      return popup;
+    }
+
+    /* Main flow */
+    async function launch() {
+      launchBtn.disabled = true;
+      statusEl.className = 'status';
+      statusEl.textContent = '';
+
+      try {
+        // Step 1: pre-register SW
+        statusEl.innerHTML = '<span class="spinner"></span>Registering service worker…';
+        await preRegisterSW();
+
+        // Step 2: fetch frontend
+        statusEl.innerHTML = '<span class="spinner"></span>Fetching latest proxy…';
+        const html = await fetchFrontend();
+
+        // Step 3: inject config
+        const modifiedHtml = injectConfig(html);
+
+        // Step 4: open about:blank + write
+        statusEl.innerHTML = '<span class="spinner"></span>Opening about:blank…';
+        const popup = openInAboutBlank(modifiedHtml);
+
+        statusEl.className = 'status is-success';
+        statusEl.textContent = 'Opened in about:blank — you can close this tab.';
+        launchBtn.disabled = false;
+        launchBtn.textContent = 'Open another tab';
+      } catch (err) {
+        statusEl.className = 'status is-error';
+        statusEl.textContent = err.message;
+        launchBtn.disabled = false;
+      }
+    }
+
+    // Pre-register SW on page load (non-blocking)
+    preRegisterSW().then(() => {
+      statusEl.textContent = 'Ready — click the button to open.';
+      launchBtn.disabled = false;
+    }).catch(err => {
+      statusEl.className = 'status is-error';
+      statusEl.textContent = 'SW error: ' + err.message + ' (you can still try launching)';
+      launchBtn.disabled = false;
+    });
+
+    launchBtn.addEventListener('click', launch);
+  </script>
+</body>
+</html>

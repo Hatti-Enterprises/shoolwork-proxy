@@ -1,0 +1,19 @@
+{
+  "name": "shoolwork-proxy-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for Shoolwork Proxy — bare server + Google Drive sync",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@tomphttp/bare-server-node": "^2.0.6",
+    "@vercel/kv": "^2.0.0",
+    "googleapis": "^140.0.1"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}

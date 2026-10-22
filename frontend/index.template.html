@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Shoolwork Proxy</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImcxIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNmVlN2ZmIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYTc4YmZhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiByeD0iMTQiIGZpbGw9IiMxYTEzMzAiIHN0cm9rZT0idXJsKCNnMSkiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHBhdGggZD0iTTQwIDI0YzAtNC00LTctOS03cy05IDMtOSA3IDQgNiA5IDYgOSAyIDkgNi00IDctOSA3LTktMy05LTciIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMSkiIHN0cm9rZS13aWR0aD0iMy41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- INLINE_CSS -->
+</head>
+<body class="newtab">
+<!-- INLINE_BODY -->
+  <!-- UV bootstrap. Bundle must load BEFORE config (config reads Ultraviolet global). -->
+  <script src="https://cdn.jsdelivr.net/npm/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js"></script>
+  <script>
+    // Inline UV config — page-side. Sets window.uv for app.js to call
+    // uv.encodeUrl() and uv.prefix. The SW has its own copy of this config.
+    //
+    // The UV prefix is RELATIVE to this page's own URL — computed at runtime
+    // so the proxy works on any host (jsDelivr loader, GitHub Pages, Netlify,
+    // Cloudflare Pages, custom domain, etc.) without code changes.
+    //
+    // BACKEND_URL must match what's set in sw.js. Default: same-origin.
+    window.SHoolworkBackendUrl = window.SHoolworkBackendUrl || '';  // ← set this to your backend URL, e.g. 'https://your-backend.vercel.app'
+
+    // Compute the UV prefix relative to this page's directory.
+    // Example: page at https://example.com/foo/index.html → prefix is
+    //          https://example.com/foo/service/
+    // The SW (registered at ./sw.js) has the same scope dir + 'service/'.
+    const PAGE_DIR = location.href.replace(/[^/]*$/, '');
+    const UV_PREFIX = PAGE_DIR + 'service/';
+
+    self.__uv = self.__uv || {};
+    self.__uv.config = {
+      prefix: UV_PREFIX,
+      bare: (window.SHoolworkBackendUrl || location.origin).replace(/\/+$/, '') + '/api/bare/',
+      encodeUrl: Ultraviolet.codec.xor.encode,
+      decodeUrl: Ultraviolet.codec.xor.decode,
+    };
+    self.__uv$bare = self.__uv.config.bare;
+    window.uv = {
+      prefix: self.__uv.config.prefix,
+      bare: self.__uv.config.bare,
+      encodeUrl: (url) => Ultraviolet.codec.xor.encode(url),
+      decodeUrl: (encoded) => Ultraviolet.codec.xor.decode(encoded),
+    };
+  </script>
+  <!-- INLINE_SCRIPT -->
+  <script type="module">
+    /* Embed-mode detection — if the page is loaded inside an iframe
+     * (window.self !== window.top) OR with ?embed=1, switch the top
+     * chrome to a more compact layout that fits inside a parent page.
+     */
+    const params = new URLSearchParams(location.search);
+    const isEmbed = params.get('embed') === '1' || window.self !== window.top;
+    if (isEmbed) {
+      document.body.classList.add('embed-mode');
+      const proxyBtn = document.querySelector('.chrome__nav-btn[data-view="proxy"]');
+      if (proxyBtn) proxyBtn.click();
+      const initialUrl = params.get('url');
+      if (initialUrl) {
+        const input = document.getElementById('addressInput');
+        if (input) input.value = initialUrl;
+        setTimeout(() => {
+          if (window.__shoolworkApp) window.__shoolworkApp.openInProxy(initialUrl);
+        }, 500);
+      }
+      window.parent?.postMessage({ type: 'shoolwork:ready' }, '*');
+    }
+  </script>
+</body>
+</html>

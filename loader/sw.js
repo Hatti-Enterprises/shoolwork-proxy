@@ -3,6 +3,9 @@
 // ============================================================
 const BACKEND_URL = 'https://shoolwork-proxy-backend.vercel.app';
 // ============================================================
+// Stub navigator.serviceWorker — UV bundle accesses it at top level
+// but it's undefined inside a SW context
+if (!self.navigator.serviceWorker) self.navigator.serviceWorker = { addEventListener: function(){} };
 
 importScripts('https://cdn.jsdelivr.net/npm/@titaniumnetwork-dev/ultraviolet@3.2.10/dist/uv.bundle.js');
 
